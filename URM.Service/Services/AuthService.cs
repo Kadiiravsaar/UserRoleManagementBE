@@ -34,10 +34,10 @@ namespace URM.Service.Services
 		public async Task<NewUserDto> SignIn(LoginDto loginDto)
 		{
 
-			loginDto.EnsureNotNull(Messages.FillAllFields); // Validation Extension kullanımı
+			loginDto.EnsureNotNull(Messages.FillAllFields); 
 
 			var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == loginDto.UserName.ToLower());
-			user.EnsureNotNull(Messages.UserNotFound); // Validation Extension kullanımı
+			user.EnsureNotNull(Messages.UserNotFound);
 
 			var passwordCheckResult = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 			if (!passwordCheckResult.Succeeded)
@@ -53,14 +53,14 @@ namespace URM.Service.Services
 
 		public async Task<NewUserDto> SignUp(RegisterDto registerDto)
 		{
-			registerDto.EnsureNotNull(Messages.FillAllFields); // Validation Extension kullanımı
+			registerDto.EnsureNotNull(Messages.FillAllFields); 
 
 			var user = _mapper.Map<AppUser>(registerDto);
 			var result = await _userManager.CreateAsync(user, registerDto.Password);
 
 			if (result.Succeeded)
 			{
-				await _authBusinessRules.EnsureRoleExists(Roles.User.ToString()); // Metot adını daha anlamlı hale getirdik
+				await _authBusinessRules.EnsureRoleExists(Roles.User.ToString()); 
 				await _userManager.AddToRoleAsync(user, Roles.User.ToString());
 
 				var token = await _tokenService.CreateToken(user);

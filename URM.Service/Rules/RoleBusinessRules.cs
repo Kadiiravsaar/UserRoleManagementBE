@@ -16,8 +16,8 @@ namespace URM.Service.Rules
 	public class RoleBusinessRules
 	{
 		private readonly RoleManager<AppRole> _roleManager;
-		private readonly UserManager<AppUser> _userManager; // Kullanıcı yönetimi için UserManager ekleniyor.
-		private readonly IHttpContextAccessor _httpContextAccessor; // HTTP context'e erişim sağlamak için.
+		private readonly UserManager<AppUser> _userManager; 
+		private readonly IHttpContextAccessor _httpContextAccessor; 
 
 		public RoleBusinessRules(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
 		{

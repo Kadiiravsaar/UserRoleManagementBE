@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using URM.Core.DTOs;
+using URM.Core.Extensions;
 using URM.Core.Models;
 using URM.Core.Services;
 using URM.Core.Utilities.Results;
@@ -30,6 +31,8 @@ namespace URM.Service.Services
 		public async Task<IResult> CreateRoleAsync(RoleDto roleDto)
 		{
 			//await _roleBusinessRules.AdminOrEditorRoleRequired();
+			roleDto.EnsureNotNull(Messages.FillAllFields);
+
 
 			var role = _mapper.Map<AppRole>(roleDto);
 			var result = await _roleManager.CreateAsync(role);
@@ -45,10 +48,8 @@ namespace URM.Service.Services
 			//await _roleBusinessRules.AdminRoleRequired();
 
 			var role = await _roleManager.FindByNameAsync(roleName);
-			if (role == null)
-			{
-				return new ErrorResult(Messages.RoleNotFound);
-			}
+			role.EnsureNotNull(Messages.FillAllFields);
+
 
 			_mapper.Map(roleDto, role);
 			role.NormalizedName = roleDto.Name.ToUpper();
@@ -83,11 +84,9 @@ namespace URM.Service.Services
 			//await _roleBusinessRules.AdminRoleRequired();
 
 			var user = await _userManager.FindByIdAsync(userId);
-			if (user == null)
-			{
-				return new ErrorResult(Messages.UserNotFound);
-			}
+			userId.EnsureNotNull(Messages.FillAllFields);
 
+			
 			var normalizedRoleName = await RoleNameFindAsync(roleName);
 			if (await _userManager.IsInRoleAsync(user, normalizedRoleName))
 			{
@@ -109,10 +108,8 @@ namespace URM.Service.Services
 			//await _roleBusinessRules.AdminRoleRequired();
 
 			var user = await _userManager.FindByIdAsync(userId);
-			if (user == null)
-			{
-				return new ErrorResult(Messages.UserNotFound);
-			}
+			userId.EnsureNotNull(Messages.FillAllFields);
+
 
 			var roleName = await RoleNameFindAsync(requestRoleName);
 

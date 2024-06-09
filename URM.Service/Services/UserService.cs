@@ -26,10 +26,10 @@ namespace URM.Service.Services
 		}
 		public async Task<IDataResult<UserDetailDto>> GetUserByIdAsync(string userId)
 		{
-			userId.EnsureNotNull(Messages.FillAllFields); // Validation Extension kullanımı
+			userId.EnsureNotNull(Messages.FillAllFields); 
 
 			var user = await _userManager.FindByIdAsync(userId);
-			user.EnsureNotNull(Messages.UserNotFound); // Validation Extension kullanımı
+			user.EnsureNotNull(Messages.UserNotFound); 
 
 			var roles = await _userManager.GetRolesAsync(user);
 
