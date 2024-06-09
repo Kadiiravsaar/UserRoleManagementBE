@@ -29,8 +29,7 @@ namespace URM.Service.Services
 		//[ValidationAspect(typeof(RoleValidator))] 
 		public async Task<IResult> CreateRoleAsync(RoleDto roleDto)
 		{
-			await _roleBusinessRules.AdminOrEditorRoleRequired();
-
+			//await _roleBusinessRules.AdminOrEditorRoleRequired();
 
 			var role = _mapper.Map<AppRole>(roleDto);
 			var result = await _roleManager.CreateAsync(role);
@@ -43,7 +42,7 @@ namespace URM.Service.Services
 
 		public async Task<IResult> UpdateRoleAsync(string roleName, RoleDto roleDto)
 		{
-			await _roleBusinessRules.AdminRoleRequired();
+			//await _roleBusinessRules.AdminRoleRequired();
 
 			var role = await _roleManager.FindByNameAsync(roleName);
 			if (role == null)
@@ -64,7 +63,7 @@ namespace URM.Service.Services
 
 		public async Task<IResult> DeleteRoleAsync(string roleName)
 		{
-			await _roleBusinessRules.AdminRoleRequired();
+			//await _roleBusinessRules.AdminRoleRequired();
 
 			var role = await _roleManager.FindByNameAsync(roleName);
 			await _roleManager.DeleteAsync(role);
@@ -81,7 +80,7 @@ namespace URM.Service.Services
 
 		public async Task<IResult> AssignRoleToUserAsync(string userId, string roleName)
 		{
-			await _roleBusinessRules.AdminRoleRequired();
+			//await _roleBusinessRules.AdminRoleRequired();
 
 			var user = await _userManager.FindByIdAsync(userId);
 			if (user == null)
@@ -106,7 +105,9 @@ namespace URM.Service.Services
 
 		public async Task<IResult> RemoveRoleFromUserAsync(string userId, string requestRoleName)
 		{
-			await _roleBusinessRules.AdminRoleRequired();
+			
+			//await _roleBusinessRules.AdminRoleRequired();
+
 			var user = await _userManager.FindByIdAsync(userId);
 			if (user == null)
 			{

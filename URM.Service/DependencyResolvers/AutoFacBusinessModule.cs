@@ -17,6 +17,8 @@ namespace URM.Service.DependencyResolvers
 			builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
 			
 			builder.RegisterType<RoleBusinessRules>().AsSelf().InstancePerLifetimeScope();
+			builder.RegisterType<AuthBusinessRules>().AsSelf().InstancePerLifetimeScope();
+			builder.RegisterType<UserBusinessRules>().AsSelf().InstancePerLifetimeScope();
 
 			builder.RegisterType<AuthService>().As<IAuthService>().InstancePerLifetimeScope();
 			builder.RegisterType<TokenService>().As<ITokenService>().InstancePerLifetimeScope();

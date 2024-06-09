@@ -20,6 +20,14 @@ namespace URM.Service.Mapping
 			
 			// Role for mapping
 			CreateMap<AppRole, RoleDto>().ReverseMap();
+
+			CreateMap<RegisterDto, AppUser>()
+		   .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
+		   .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
+
+			CreateMap<AppUser, NewUserDto>()
+				.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
+				.ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
 		}
 	}
 }

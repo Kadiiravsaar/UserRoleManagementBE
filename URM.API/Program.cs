@@ -100,7 +100,7 @@ namespace URM.API
 				opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"));
 			});
 
-			
+
 
 			builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
@@ -114,7 +114,7 @@ namespace URM.API
 
 			builder.Services.AddAutoMapper(typeof(MapProfile));
 
-		
+
 
 			builder.Services.AddCors(options =>
 			{
@@ -138,10 +138,10 @@ namespace URM.API
 			app.UseHttpsRedirection();
 
 			app.UseAuthentication();
-			
+
 
 			app.UseAuthorization();
-			
+
 
 			app.MapControllers();
 
