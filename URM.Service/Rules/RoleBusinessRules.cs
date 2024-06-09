@@ -5,22 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using URM.Core.Enums;
+using URM.Core.Exceptions;
 using URM.Core.Models;
 using URM.Service.Constants;
 
 namespace URM.Service.Rules
 {
-	public class BusinessException : Exception
-	{
-		public BusinessException(string message) : base(message)
-		{
-		}
-
-		public BusinessException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
-	}
-
 
 	public class RoleBusinessRules
 	{
@@ -54,7 +45,7 @@ namespace URM.Service.Rules
 		{
 			var user = _httpContextAccessor.HttpContext.User;
 			var appUser = await _userManager.GetUserAsync(user);
-			if (appUser == null || !(await _userManager.IsInRoleAsync(appUser, "Admin")))
+			if (appUser == null || !await _userManager.IsInRoleAsync(appUser, Roles.Admin.ToString()));
 				throw new BusinessException(Messages.UnauthorizedAccessOnlyAdmins);
 
 		}
@@ -63,20 +54,16 @@ namespace URM.Service.Rules
 		public async Task AdminRoleRequired()
 		{
 			var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-			if (user == null || !await _userManager.IsInRoleAsync(user, "Admin"))
+			if (user == null || !await _userManager.IsInRoleAsync(user, Roles.Admin.ToString()))
 				throw new BusinessException(Messages.OnlyAdminsCanPerformThisAction);
 		}
 
 		public async Task AdminOrEditorRoleRequired()
 		{
 			var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-			if (user == null || !(await _userManager.IsInRoleAsync(user, "Admin") || await _userManager.IsInRoleAsync(user, "Editör")))
-				throw new BusinessException(Messages.OnlyAdminsOrEditorsCanPerformThisAction);
-
+				if (user == null || !(await _userManager.IsInRoleAsync(user, Roles.Admin.ToString()) || await _userManager.IsInRoleAsync(user, Roles.Editor.ToString())))
+					throw new BusinessException(Messages.OnlyAdminsOrEditorsCanPerformThisAction);
 		}
-
-
-
 
 	}
 

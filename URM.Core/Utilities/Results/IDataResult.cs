@@ -1,4 +1,4 @@
-﻿namespace URM.Core.Ultities.Results
+﻿namespace URM.Core.Utilities.Results
 {
 	public interface IDataResult<out T> : IResult
 	{

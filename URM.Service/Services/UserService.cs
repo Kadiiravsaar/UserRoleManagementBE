@@ -9,8 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using URM.Core.DTOs;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
-using URM.Core.Ultities.Results;
 using URM.Service.Constants;
+using URM.Core.Utilities.Results;
+using URM.Core.Extensions;
 
 namespace URM.Service.Services
 {
@@ -25,30 +26,21 @@ namespace URM.Service.Services
 		}
 		public async Task<IDataResult<UserDetailDto>> GetUserByIdAsync(string userId)
 		{
+			userId.EnsureNotNull(Messages.FillAllFields); // Validation Extension kullanımı
+
 			var user = await _userManager.FindByIdAsync(userId);
-			if (user == null)
-			{
-				throw new KeyNotFoundException("Kullanıcı bulunamadı.");
-			} // burada iş kuralını düzgün yaz
+			user.EnsureNotNull(Messages.UserNotFound); // Validation Extension kullanımı
 
 			var roles = await _userManager.GetRolesAsync(user);
 
-
-			// burada mapp kullan
-			var userDetailDto = new UserDetailDto
-			{
-				Id = user.Id,
-				UserName = user.UserName,
-				Email = user.Email,
-				Roles = roles.ToList()
-			};
+			var userDetailDto = _mapper.Map<UserDetailDto>(user);
+			userDetailDto.Roles = roles.ToList(); // Rolleri manuel olarak ekliyoruz
 
 			return new SuccessDataResult<UserDetailDto>(userDetailDto);
 		}
 
-		
-		
 
+		
 		public async Task<IDataResult<List<UserDto>>> UserList()
 		{
 			var users = await _userManager.Users.ToListAsync();

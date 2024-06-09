@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace URM.Core.Ultities.Results
+namespace URM.Core.Utilities.Results
 {
 	public class DataResult<T> : Result, IDataResult<T>
 	{

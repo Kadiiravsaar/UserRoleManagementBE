@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using URM.Core.DTOs;
 using URM.Core.Models;
 using URM.Core.Services;
-using URM.Core.Ultities.Results;
+using URM.Core.Utilities.Results;
 using URM.Service.Constants;
 using URM.Service.Rules;
 

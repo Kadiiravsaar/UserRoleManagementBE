@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using URM.Core.DTOs;
 using URM.Core.Services;
-using URM.Core.Ultities.Results;
 using URM.Service.Constants;
 using URM.Service.Services;
 
@@ -37,7 +36,7 @@ namespace URM.API.Controllers
 			return Ok(result); 
 		}
 
-		[HttpDelete("delete/{roleName}")]
+		[HttpDelete("delete")]
 		[Authorize]
 		public async Task<IActionResult> DeleteRole(string roleName)
 		{

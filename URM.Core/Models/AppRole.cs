@@ -9,7 +9,7 @@ namespace URM.Core.Models
 {
 	public class AppRole: IdentityRole
 	{
-        public string Description { get; set; }
+        public string Description { get; set; } // db de nullable değil o yüzden doldurulması zorunlu istersek değişebiliriz
     }
 
 		

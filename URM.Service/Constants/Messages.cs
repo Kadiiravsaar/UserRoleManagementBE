@@ -11,7 +11,11 @@ namespace URM.Service.Constants
 	{
 		public static string RoleAssignedToUser = "Kullanıcıya Rol Atandı";
 		public static string UserRoleWasSuccessfullyRemoved = "Rol Başarıyla Kaldırıldı";
-		public static string UserNotFound = "Kullanıcı Bulunamadıı";
+		public static string UserNotFound = "Kayıtlı bir kullanıcı Bulunamadıı";
+
+		public static string InvalidUsernameOrPassword = "Geçersiz kullanıcı adı veya şifre.";
+
+		public static string FillAllFields = "Lütfen Tüm Alanları Doldurun";
 
 		public static string RoleNotRegistered = "Kullanıcıya Ait Rol Yok";
 		public static string RoleAlreadyAssigned = "Bu Rol Zaten Kullanıcıya Ait ";
