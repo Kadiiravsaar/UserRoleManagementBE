@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using URM.Core.DTOs;
+using URM.Core.Exceptions;
 using URM.Core.Extensions;
 using URM.Core.Models;
 using URM.Core.Services;
@@ -31,8 +32,11 @@ namespace URM.Service.Services
 		public async Task<IResult> CreateRoleAsync(RoleDto roleDto)
 		{
 			//await _roleBusinessRules.AdminOrEditorRoleRequired();
-			roleDto.EnsureNotNull(Messages.FillAllFields);
 
+			roleDto.EnsureNotNull(Messages.FillAllFields); 
+
+		
+			await _roleBusinessRules.RoleNameShouldBeUnique(roleDto.Name); 
 
 			var role = _mapper.Map<AppRole>(roleDto);
 			var result = await _roleManager.CreateAsync(role);
@@ -47,9 +51,12 @@ namespace URM.Service.Services
 		{
 			//await _roleBusinessRules.AdminRoleRequired();
 
-			var role = await _roleManager.FindByNameAsync(roleName);
-			role.EnsureNotNull(Messages.FillAllFields);
+			roleDto.EnsureNotNull(Messages.FillAllFields); 
 
+			
+			await _roleBusinessRules.RoleShouldExistWhenUpdatedOrDeleted(roleName);
+
+			var role = await _roleManager.FindByNameAsync(roleName);
 
 			_mapper.Map(roleDto, role);
 			role.NormalizedName = roleDto.Name.ToUpper();
@@ -66,12 +73,14 @@ namespace URM.Service.Services
 		{
 			//await _roleBusinessRules.AdminRoleRequired();
 
+			await _roleBusinessRules.RoleShouldExistWhenUpdatedOrDeleted(roleName); // Vurgulanan Kısım: İş Kuralı
+
 			var role = await _roleManager.FindByNameAsync(roleName);
 			await _roleManager.DeleteAsync(role);
 			return new SuccessResult(Messages.RoleDeleted);
 		}
 
-//		[AllowAnonymous] // interceptor bu kod ile bu metodda yoluna devam edecek
+		// [AllowAnonymous]  interceptor bu kod ile bu metodda yoluna devam edecek
 		public async Task<IDataResult<List<RoleDto>>> GetAllRolesAsync()
 		{
 			var roles = await _roleManager.Roles.ToListAsync();
@@ -83,10 +92,12 @@ namespace URM.Service.Services
 		{
 			//await _roleBusinessRules.AdminRoleRequired();
 
-			var user = await _userManager.FindByIdAsync(userId);
 			userId.EnsureNotNull(Messages.FillAllFields);
 
-			
+			var user = await _userManager.FindByIdAsync(userId);
+
+			user.EnsureNotNull(Messages.UserNotFound); 
+
 			var normalizedRoleName = await RoleNameFindAsync(roleName);
 			if (await _userManager.IsInRoleAsync(user, normalizedRoleName))
 			{
@@ -104,12 +115,14 @@ namespace URM.Service.Services
 
 		public async Task<IResult> RemoveRoleFromUserAsync(string userId, string requestRoleName)
 		{
-			
+
 			//await _roleBusinessRules.AdminRoleRequired();
+			userId.EnsureNotNull(Messages.FillAllFields); 
+
 
 			var user = await _userManager.FindByIdAsync(userId);
-			userId.EnsureNotNull(Messages.FillAllFields);
 
+			user.EnsureNotNull(Messages.UserNotFound); 
 
 			var roleName = await RoleNameFindAsync(requestRoleName);
 
@@ -125,7 +138,7 @@ namespace URM.Service.Services
 		private async Task<string> RoleNameFindAsync(string roleName)
 		{
 			var role = await _roleManager.FindByNameAsync(roleName);
-			return role?.Name ?? throw new InvalidOperationException("Role not found.");
+			return role?.Name ?? throw new BusinessException(Messages.RoleNotFound);
 		}
 	}
 }

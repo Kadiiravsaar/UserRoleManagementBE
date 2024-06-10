@@ -26,6 +26,13 @@ namespace URM.Service.Rules
 			_httpContextAccessor = httpContextAccessor;
 		}
 
+
+		/// <summary>
+		///  İş Kuralı: Rolün benzersiz olup olmadığını kontrol et
+		/// </summary>
+		/// <param name="roleName"></param>
+		/// <returns></returns>
+		/// <exception cref="BusinessException"></exception>
 		public async Task RoleNameShouldBeUnique(string roleName)
 		{
 			var roleExists = await _roleManager.RoleExistsAsync(roleName);
@@ -34,6 +41,12 @@ namespace URM.Service.Rules
 
 		}
 
+		/// <summary>
+		///  İş Kuralı: Rolün var olup olmadığını kontrol et
+		/// </summary>
+		/// <param name="roleName"></param>
+		/// <returns></returns>
+		/// <exception cref="BusinessException"></exception>
 		public async Task RoleShouldExistWhenUpdatedOrDeleted(string roleName)
 		{
 			var role = await _roleManager.FindByNameAsync(roleName);
@@ -47,7 +60,6 @@ namespace URM.Service.Rules
 			var appUser = await _userManager.GetUserAsync(user);
 			if (appUser == null || !await _userManager.IsInRoleAsync(appUser, Roles.Admin.ToString()));
 				throw new BusinessException(Messages.UnauthorizedAccessOnlyAdmins);
-
 		}
 
 
